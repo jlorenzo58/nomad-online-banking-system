@@ -1,0 +1,199 @@
+.home{
+    padding-left: 1em;
+    font-size: 45px;
+    line-height: 29pt;
+}
+
+.welcome{
+    background-color: #4d3bbc;
+    min-height: 18em;
+    min-width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.signIn{
+    flex: 1;
+    height: calc(100% - 2em);
+    max-width:30em;
+    margin:1em auto 0 8em;
+    background-color: white;
+}
+
+.open-account{
+    margin: 1em 1em auto auto;
+    flex: 1;
+    height: calc(100% - 2em);
+    max-width:50em;
+    text-align: center;
+    
+}
+
+.icons{
+    display: inline-block;
+    min-width: 33.3%;
+    min-height: 100%;
+    color:white;
+    
+}
+
+.prompt{
+    margin-top:2em;
+    color:white;
+    font-size: 30px;
+}
+
+.btn-create-account {
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .signIn, .open-account {
+      margin-left: 5em;
+    }
+}
+  
+@media (max-width: 480px) {
+    .signIn, .open-account{
+      margin-left: 2em;
+    }
+}
+
+.span-welcome{
+    text-align: center;
+    font-size:30px;
+}
+
+.row100{
+    position: relative;
+    width: calc(100% - 2em);
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
+}
+
+.row100 .col {
+    position: relative;
+    width: 100%;
+    padding: 0 10px;
+    margin: 30px 0 10px;
+    transition: 0.5s;
+}
+
+.row100 .inputBox{
+    position: relative;
+    width: 100%;
+    height: 40px;
+    color: grey;
+}
+
+.row100 .inputBox input{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    padding: 0 10px;
+    z-index: 1;
+    color: black;
+}
+
+.row100 .inputBox .text{
+    position: absolute;
+    top: 0;
+    left: 0;
+    line-height: 40px;
+    font-size: 18px;
+    padding: 0 10px;
+    display: block;
+    transition: 0.5s;
+    pointer-events: none;
+}
+
+.row100 .inputBox input:focus + .text,
+.row100 .inputBox input:valid + .text {
+    top: -35px;
+    left: -10px;
+}
+
+.row100 .inputBox .line{
+    position: absolute;
+    bottom: 0;
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: #cfc8f9;
+    transition: 0.5s;
+    border-radius: 2px;
+    pointer-events: none;
+}
+
+.row100 .inputBox input:focus ~ .line,
+.row100 .inputBox input:valid ~ .line{
+    height: 100%;
+}
+
+input[type="submit"]{
+    border: none;
+    padding: 3px 35px;
+    cursor: pointer;
+    outline: none;
+    background: #614aeb;
+    color: white;
+    font-size: 18px;
+    border-radius: 2px;
+}
+
+.signIn-align{
+    text-align: center;
+}
+
+.content{
+    width:83.5%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.content .tile{
+    flex: 1 1 30%;
+    max-height: 20em;
+    margin: 10px;
+    border: 1px solid black;
+}
+
+.content .tile .title-header{
+    min-height:20%;
+    background-color: #705ced;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    font-size:30px;
+    color:white;
+}
+.content .tile .title-header span{
+    line-height: 100%;
+}
+
+.faqs{
+    overflow: auto; 
+    height:80%;
+    text-align:left;
+    padding-left:2px;
+    padding-right:10px;
+}
+
+@media (max-width: 500px) { 
+    .content .tile {
+      flex: 0 0 100%;
+    }
+  }
