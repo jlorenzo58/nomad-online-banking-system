@@ -3,6 +3,8 @@ import "../styles/home.css"
 import { ThemeContext } from '../themeContext.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCreditCard, faPiggyBank } from '@fortawesome/fontawesome-free-solid'
+import { Container, Typography, Box, Grid, TextField, Button, Link, Paper } from '@mui/material'
+
 
 function Home( {} ){
 
@@ -72,40 +74,23 @@ function Home( {} ){
                     </div>
                 </div>
             </div>
-            <div className="content">
-                <div className="tile">
-                    <div className="title-header">
-                        <span>News</span>
-                    </div>
-                    <div>
-                        <p><a href="https://www.cnbc.com/2023/03/20/first-republic-falls-sp-credit-rating-downgrade.html">First Republic continues tanking</a></p>
-                        <p><a href="https://www.cnn.com/business/live-news/stock-market-credit-suisse-bank-merger-03-20-23/index.html">Latest on the banking crisis and global markets</a></p>
-                        <p><a href="https://www.cnn.com/2023/03/20/investing/global-markets-banking-sector-intl-hnk/index.html">Asia Pacific stocks rise as investor worries about global banking turmoil ease</a></p>
-                        <p><a href="https://www.usnews.com/news/politics/articles/2023-03-21/army-of-lobbyists-helped-water-down-banking-regulations">Army of Lobbyists Helped Water Down Banking Regulations</a></p>
-                    </div>
+            <div>
+                <div style={{ padding: '20px', textAlign: 'justify' }}>
+                <div style={{ marginBottom: '20px' }}>
+                    <Typography variant="h5">FAQs</Typography>
+                <div>
+                <Typography variant="subtitle1"><b>What is online banking and how does it work?</b></Typography>
+                <Typography variant="body1">Online banking allows you to manage your bank account through a website or mobile app, instead of having to visit a physical bank branch. You can check your account balance, view transaction history, transfer money, and pay bills.</Typography>
                 </div>
-                <div className="tile"> 
-                    <div className="title-header">
-                        <span>FAQs</span>
-                    </div>
-                    <div className="faqs">
-                        <p><b>What is online banking and how does it work?</b></p>
-                        <p>Online banking allows you to manage your bank account through a website or mobile app, instead of having to visit a physical bank branch. You can check your account balance, view transaction history, transfer money, and pay bills.</p>
-                        <p><b>Is online banking secure?</b></p>
-                        <p>Yes, online banking is generally considered secure, as long as you take appropriate precautions such as using a strong password, logging out after each session, and avoiding public Wi-Fi when accessing your account.</p>
-                        <p><b>How do I transfer money between accounts?</b></p>
-                        <p>To transfer money between accounts, log in to your online banking account and navigate to the transfer or payments section. You can then select the accounts you want to transfer money between, enter the amount, and confirm the transaction.</p>
-                        <p><b>Can I deposit checks through online banking?</b></p>
-                        <p>Yes! Just snap a photo of your check with your phone and submit.</p>
-                    </div>
+                <div>
+                    <Typography variant="subtitle1"><b>Is online banking secure?</b></Typography>
+                    <Typography variant="body1">Yes, online banking is generally considered secure, as long as you take appropriate precautions such as using a strong password, logging out after each session, and avoiding public Wi-Fi when accessing your account.</Typography>
                 </div>
-                <div className="tile">
-                    <div className="title-header">
-                        <span>About Us</span>
-                    </div>
-                    <div>
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consectetur consequatur facilis possimus deleniti doloribus, sed necessitatibus perferendis repellendus earum praesentium.</p>
-                    </div>
+                <div>
+                    <Typography variant="subtitle1"><b>How do I transfer money between accounts?</b></Typography>
+                    <Typography variant="body1">To transfer money between accounts, log in to your online banking account and navigate to the transfer or payments section. </Typography>
+                </div>
+                </div>
                 </div>
             </div>
         </Fragment>
