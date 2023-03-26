@@ -35,7 +35,7 @@ function Send() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // alert(`Account Type: ${accountType}, Amount: ${amount}, Account: ${account}`);
+    alert(`Account Type: ${accountType}, Amount: ${amount}, Account: ${account}`);
     try {
       axios.post(`http://localhost:3001/api/send-money/${userId}`, {accountType, amount, account}).then(response => {
         console.log(response.data)

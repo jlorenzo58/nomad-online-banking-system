@@ -51,7 +51,7 @@ app.get('/api/overview/:id', async (req, res) => {
   
   try {
     const result = await pool.query(
-      'SELECT checking_routing_num, checking_account_num, saving_routing_num, saving_account_num, checking_balance, savings_balance FROM users WHERE id = $1',
+      'SELECT checking_routing_num, checking_account_num, savings_routing_num, savings_account_num, checking_balance, savings_balance FROM users WHERE id = $1',
       [id]
     );
 
@@ -104,16 +104,16 @@ app.post('/api/send-money/:id', async (req, res) => {
     const senderBalanceColumnName = `${accountType}_balance`;
     const senderAccount = await pool.query(`SELECT "${senderBalanceColumnName}" FROM users WHERE id =$1`, [id]);
     // console.log(senderAccount)
-    const senderBalance = senderAccount.rows[0].senderBalanceColumnName;
-    const deduct = senderBalance-amount;
+    const senderBalance = senderAccount.rows[0][senderBalanceColumnName];
+    const temp1 = parseFloat(senderBalance) - parseFloat(amount);
+    const deduct = temp1.toFixed(2);
     await pool.query(`UPDATE users SET "${senderBalanceColumnName}" = ${deduct} WHERE id = $1`, [id]);
 
 
     // get the recipient's account balance and update it
     const recipientBalanceColumnName = `${accountType}_balance`;
     const recipientAccount = await pool.query(`SELECT "${recipientBalanceColumnName}" FROM users WHERE ${accountType}_account_num = $1`, [account]);
-    console.log(recipientAccount.rows[0])
-    const recipientBalance = recipientAccount.rows[0].recipientBalanceColumnName;
+    const recipientBalance = recipientAccount.rows[0][recipientBalanceColumnName];
     const temp = parseFloat(recipientBalance) + parseFloat(amount);
     const newBalance = temp.toFixed(2);
   
