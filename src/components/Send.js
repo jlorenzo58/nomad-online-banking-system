@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core';
 import axios from "axios"
 
-function PayBill() {
+function Send() {
   const [accountType, setAccountType] = useState('checking');
   const [amount, setAmount] = useState('');
   const [account, setAccount] = useState('');
@@ -104,4 +104,4 @@ function PayBill() {
   );
 }
 
-export default PayBill;
+export default Send;

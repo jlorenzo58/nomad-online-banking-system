@@ -6,7 +6,7 @@ import NavBar from "./components/NavBar";
 import Footer from "./components/Footer.js";
 import Overview from "./components/Overview.js";
 import Settings from "./components/Settings.js";
-import PayBill from "./components/PayBill.js";
+import Send from "./components/Send.js";
 import DepositCheck from "./components/DepositCheck.js";
 import Transfer from "./components/Transfer.js";
 import {
@@ -29,7 +29,7 @@ function App() {
           <Route path="/transfer" element={<Transfer />} />
           <Route path="/overview/:id" element={<Overview />} />
           <Route path ="/depositcheck" element={<DepositCheck/>} />
-          <Route path="/paybill" element={<PayBill />} /> 
+          <Route path="/send" element={<Send />} /> 
           <Route path="/settings" element ={<Settings />} />
         </Routes>
         <Footer />
