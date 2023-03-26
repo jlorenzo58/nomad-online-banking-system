@@ -13,12 +13,13 @@ app.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
   
     try {
-      const query = 'SELECT * FROM users WHERE username = $1 AND password = $2';
+      const query = 'SELECT id FROM users WHERE username = $1 AND password = $2';
       const values = [username, password];
       const result = await pool.query(query, values);
       
       if (result.rows.length > 0) {
-        res.status(200).json({ message: 'Login successful' });
+        
+        res.status(200).json({ message: 'Login successful', userId: result.rows[0].id });
       } else {
         res.status(401).json({ message: 'Invalid username or password' });
       }
@@ -43,6 +44,22 @@ app.post('/api/accounts', async (req, res) => {
         console.error(err);
         res.status(500).json({ error: 'Internal server error' });
       }
+});
+
+app.get('/api/overview/:id', async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+    const result = await pool.query(
+      'SELECT checking_routing_num, checking_account_num, saving_routing_num, saving_account_num, checking_balance, savings_balance FROM users WHERE id = $1',
+      [id]
+    );
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal server error');
+  }
 });
 
 

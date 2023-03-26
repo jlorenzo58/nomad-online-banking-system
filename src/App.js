@@ -27,7 +27,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/transfer" element={<Transfer />} />
-          <Route path="/overview" element={<Overview />} />
+          <Route path="/overview/:id" element={<Overview />} />
           <Route path ="/depositcheck" element={<DepositCheck/>} />
           <Route path="/paybill" element={<PayBill />} /> 
           <Route path="/settings" element ={<Settings />} />
