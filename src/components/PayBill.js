@@ -11,10 +11,15 @@ import {
   MenuItem,
   Button,
 } from '@material-ui/core';
+import axios from "axios"
 
 function PayBill() {
-  const [accountType, setAccountType] = useState('');
+  const [accountType, setAccountType] = useState('checking');
   const [amount, setAmount] = useState('');
+  const [account, setAccount] = useState('');
+  const userId = localStorage.getItem('userId');
+  console.log(userId)
+
 
   const handleAccountTypeChange = (event) => {
     setAccountType(event.target.value);
@@ -24,18 +29,29 @@ function PayBill() {
     setAmount(event.target.value);
   };
 
+  const handleAccountChange = (event) => {
+    setAccount(event.target.value);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(`Account Type: ${accountType}, Amount: ${amount}`);
-    // Send request to backend to process payment
-    // ...
+    // alert(`Account Type: ${accountType}, Amount: ${amount}, Account: ${account}`);
+    try {
+      axios.post(`http://localhost:3001/api/send-money/${userId}`, {accountType, amount, account}).then(response => {
+        console.log(response.data)
+      });
+      // show success message or redirect to a success page
+    } catch (err) {
+      console.error(err);
+      // show error message or handle error
+    }
   };
 
   return (
     <Container maxWidth="sm">
       <Paper style={{ padding: 16 }}>
         <Typography variant="h4" align="center" gutterBottom>
-          Pay Bill
+          Send Money
         </Typography>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
@@ -59,6 +75,16 @@ function PayBill() {
                 label="Amount"
                 value={amount}
                 onChange={handleAmountChange}
+                required
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Recipient Account Number"
+                value={account}
+                onChange={handleAccountChange}
+                required
               />
             </Grid>
             <Grid item xs={12}>
@@ -68,7 +94,7 @@ function PayBill() {
                 color="primary"
                 fullWidth
               >
-                Pay
+                Send
               </Button>
             </Grid>
           </Grid>

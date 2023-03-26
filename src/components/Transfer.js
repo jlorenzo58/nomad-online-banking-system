@@ -12,6 +12,7 @@ import {
     MenuItem,
     Button,
   } from '@material-ui/core';
+  import axios from "axios"
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -30,21 +31,40 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DepositBillPage = () => {
-  
+    const userId = localStorage.getItem('userId');
 
     const [amount, setAmount] = useState('');
-    const [account, setAccount] = useState('');
+    const [fromAccount, setFromAccount] = useState('');
+    const [toAccount, setToAccount] = useState('');
+
 
     const handleAmountChange = (event) => {
-    setAmount(event.target.value);
+      setAmount(event.target.value);
     };
 
     const handleAccountChange = (event) => {
-    setAccount(event.target.value);
+      setFromAccount(event.target.value);
+      if(event.target.value==='checking'){
+        setToAccount('savings');
+      }
+      if(event.target.value==='savings'){
+        setToAccount('checking');
+      }
     };
 
-    const handleTransferClick = () => {
-    console.log(`Transferring ${amount} from ${account}`);
+    const handleSubmit = (event) => {
+      event.preventDefault();
+    // alert(`Account Type: ${accountType}, Amount: ${amount}, Account: ${account}`);
+    try {
+      axios.post(`http://localhost:3001/api/transfer/${userId}`, {fromAccount, toAccount, amount}).then(response => {
+        // console.log(response.data)
+      });
+      // show success message or redirect to a success page
+    } catch (err) {
+      console.error(err);
+      // show error message or handle error
+    }
+      
     };
 
   return (
@@ -53,14 +73,17 @@ const DepositBillPage = () => {
         <Typography variant="h4" align="center" gutterBottom>
           Transfer
         </Typography>
-        <form >
+        <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <FormControl fullWidth>
                 <InputLabel id="account-type-label">Transfer From</InputLabel>
                 <Select
-                  labelId="account-type-label"
-                  id="account-type-select"
+                labelId="account-type-label"
+                id="account-type-select"
+                value={fromAccount}
+                required
+                onChange={handleAccountChange}
                 >
                   <MenuItem value="checking">Checking</MenuItem>
                   <MenuItem value="savings">Savings</MenuItem>
@@ -73,6 +96,7 @@ const DepositBillPage = () => {
                 label="Amount"
                 value={amount}
                 onChange={handleAmountChange}
+                required
               />
             </Grid>
             <Grid item xs={12}>

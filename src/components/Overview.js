@@ -60,7 +60,7 @@ const AccountOverview = () => {
       setListLifecycle(Lifecycle.Loading)
       axios.get(`http://localhost:3001/api/overview/${params.id}`)
       .then(response => {
-        console.log(response.data)
+        // console.log(response.data)
         setInfo(response.data);
         setListLifecycle(Lifecycle.Success)
       })
@@ -78,7 +78,7 @@ const AccountOverview = () => {
       <Typography>{dateString}</Typography>
 
       <Box display="flex" justifyContent="space-between" mt={3}>
-        <Button variant="contained" color="primary"><Link to="/paybill" style={{ textDecoration: 'none' }}>Pay Bills</Link></Button>
+        <Button variant="contained" color="primary"><Link to="/paybill" style={{ textDecoration: 'none' }}>Send Money</Link></Button>
         <Button variant="contained" color="primary"><Link to="/depositcheck" style={{ textDecoration: 'none' }}>Deposit Checks</Link></Button>
         <Button variant="contained" color="primary"><Link to="/transfer" style={{ textDecoration: 'none' }}>Transfer</Link></Button>
       </Box>

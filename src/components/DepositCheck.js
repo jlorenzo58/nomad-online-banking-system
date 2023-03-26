@@ -12,6 +12,7 @@ import {
     MenuItem,
     Button,
   } from '@material-ui/core';
+  import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -34,6 +35,7 @@ const DepositBillPage = () => {
   const [file, setFile] = useState(null);
   const [amount, setAmount] = useState('');
   const [accountType, setAccountType] = useState('checking');
+  const userId = localStorage.getItem('userId');
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -47,12 +49,18 @@ const DepositBillPage = () => {
     setAccountType(e.target.value);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Submitting deposit...');
-    console.log('File:', file);
-    console.log('Amount:', amount);
-    console.log('Account type:', accountType);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // alert(`Account Type: ${accountType}, Amount: ${amount}, Account: ${account}`);
+    try {
+      axios.post(`http://localhost:3001/api/deposit-check/${userId}`, {accountType, amount}).then(response => {
+        console.log(response.data)
+      });
+      // show success message or redirect to a success page
+    } catch (err) {
+      console.error(err);
+      // show error message or handle error
+    }
   };
 
   return (
@@ -86,6 +94,7 @@ const DepositBillPage = () => {
                   id="account-type-select"
                   value={accountType}
                   onChange={handleAccountTypeChange}
+                  required
                 >
                   <MenuItem value="checking">Checking</MenuItem>
                   <MenuItem value="savings">Savings</MenuItem>
@@ -98,6 +107,7 @@ const DepositBillPage = () => {
                 label="Amount"
                 value={amount}
                 onChange={handleAmountChange}
+                required
               />
             </Grid>
             <Grid item xs={12}>
