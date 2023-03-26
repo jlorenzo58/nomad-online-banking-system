@@ -1,14 +1,15 @@
 .home{
-    padding-left: 1em;
-    font-size: 45px;
+    padding-left: 20px;
+    font-size: 35px;
     line-height: 29pt;
 }
 
 .welcome{
-    background-color: #4d3bbc;
+    background-color: #614aeb;
     min-height: 18em;
     min-width: 100%;
     display: flex;
+    padding-bottom:0.5em;
     flex-wrap: wrap;
 }
 
@@ -68,6 +69,7 @@
 .span-welcome{
     text-align: center;
     font-size:30px;
+    color:black;
 }
 
 .row100{
