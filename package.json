@@ -56,5 +56,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/parser": "^5.56.0",
+    "typescript": "^5.0.2"
   }
 }
