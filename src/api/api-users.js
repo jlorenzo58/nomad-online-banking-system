@@ -54,7 +54,6 @@ app.get('/api/overview/:id', async (req, res) => {
       'SELECT checking_routing_num, checking_account_num, savings_routing_num, savings_account_num, checking_balance, savings_balance FROM users WHERE id = $1',
       [id]
     );
-
     res.json(result.rows[0]);
   } catch (err) {
     console.error(err);

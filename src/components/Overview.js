@@ -95,8 +95,8 @@ const AccountOverview = () => {
         <Box className={classes.accountBox}>
           <Typography className={classes.accountType}>Savings</Typography>
           <Typography variant="h6">${info.savings_balance}</Typography>
-          <Typography>Account #: {info.saving_account_num}</Typography>
-          <Typography>Routing #: {info.saving_account_num}</Typography>
+          <Typography>Account #: {info.savings_account_num}</Typography>
+          <Typography>Routing #: {info.savings_account_num}</Typography>
         </Box>
       </Box>
       }
