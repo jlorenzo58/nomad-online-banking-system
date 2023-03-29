@@ -110,6 +110,13 @@ const DepositBillPage = () => {
                 label="Amount"
                 value={amount}
                 onChange={handleAmountChange}
+                InputProps={{
+                  startAdornment: (
+                    <Typography variant="h6" component="span" style={{ fontSize: 14 }}>
+                      $
+                    </Typography>
+                  ),
+                }}
                 required
               />
             </Grid>
