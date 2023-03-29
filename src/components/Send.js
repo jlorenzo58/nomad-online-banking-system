@@ -35,15 +35,18 @@ function Send() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    alert(`Account Type: ${accountType}, Amount: ${amount}, Account: ${account}`);
     try {
       axios.post(`http://localhost:3001/api/send-money/${userId}`, {accountType, amount, account}).then(response => {
         console.log(response.data)
+        alert("Sent");
+        setAccountType('checking');
+        setAmount('');
+        setAccount('');
       });
       // show success message or redirect to a success page
     } catch (err) {
       console.error(err);
-      // show error message or handle error
+      alert("Not enough funds");
     }
   };
 

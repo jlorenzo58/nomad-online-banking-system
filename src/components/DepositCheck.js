@@ -54,11 +54,14 @@ const DepositBillPage = () => {
     // alert(`Account Type: ${accountType}, Amount: ${amount}, Account: ${account}`);
     try {
       axios.post(`http://localhost:3001/api/deposit-check/${userId}`, {accountType, amount}).then(response => {
-        console.log(response.data)
+         alert("Deposits may take a few days to show in your account.");
+         setAmount('');
+         setAccountType('checking');
       });
       // show success message or redirect to a success page
     } catch (err) {
       console.error(err);
+      alert("Unable to deposit your check right now.")
       // show error message or handle error
     }
   };

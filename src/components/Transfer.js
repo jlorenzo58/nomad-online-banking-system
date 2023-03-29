@@ -57,11 +57,15 @@ const DepositBillPage = () => {
     // alert(`Account Type: ${accountType}, Amount: ${amount}, Account: ${account}`);
     try {
       axios.post(`http://localhost:3001/api/transfer/${userId}`, {fromAccount, toAccount, amount}).then(response => {
-        // console.log(response.data)
+        alert(`You transferred $${amount} from ${fromAccount}`);
+        setToAccount('');
+        setFromAccount('');
+        setAmount('');
       });
       // show success message or redirect to a success page
     } catch (err) {
       console.error(err);
+      alert("Unable to transfer right now.");
       // show error message or handle error
     }
       
