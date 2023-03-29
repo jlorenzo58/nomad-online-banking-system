@@ -27,26 +27,24 @@ function Home( {} ){
         })
         .catch(error => {
             console.error(error);
+            alert("Incorrect username or password");
         });
       };
 
       const handleSignIn = (event) =>{
         event.preventDefault();
-        console.log(event.target.cardNumber.value);
-        console.log(event.target.username.value);
-        console.log(event.target.password.value);
-
         const username = event.target.username.value;
         const password = event.target.password.value;
         const creditCardNumber = event.target.cardNumber.value;
         axios.post('http://localhost:3001/api/accounts', { creditCardNumber, username, password })
         .then(response => {
-            console.log(response.data);
+            localStorage.setItem('userId', response.data.userId);
+            navigate(`/overview/${response.data.userId}`);
         })
         .catch(error => {
             console.error(error);
+            alert("Credit card not found");
         });
-        navigate('/overview');
       }
    
     return(
@@ -145,7 +143,7 @@ function Home( {} ){
                     <div className="row100">
                     <div className="col">
                         <div className="inputBox">
-                            <input type="text" name="password" required="required" />
+                            <input type="password" name="password" required="required" />
                             <span className="text">Password</span>
                             <span className="line"></span>
                         </div>

@@ -36,10 +36,12 @@ app.post('/api/accounts', async (req, res) => {
         if (id.rows.length === 0) {
           return res.status(400).send('Invalid credit card number');
         }
-        const result = await pool.query('UPDATE users SET username = $1, password = $2 WHERE id = $3', [username, password, id.rows[0].id]);
-        console.log(result);
-    
-        res.status(201).json({ message: 'Account created successfully' });
+        else{
+          const result = await pool.query('UPDATE users SET username = $1, password = $2 WHERE id = $3', [username, password, id.rows[0].id]);
+          console.log(result);
+      
+          res.status(200).json({ message: 'Account created successfully', userId: id.rows[0].id });
+        }
       } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Internal server error' });
