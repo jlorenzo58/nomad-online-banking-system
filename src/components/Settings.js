@@ -44,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
         setListLifecycle(Lifecycle.Loading)
         axios.get(`http://localhost:3001/api/settings/${userId}`)
         .then(response => {
-          console.log(response.data)
           setInfo(response.data);
           setListLifecycle(Lifecycle.Success)
         })
@@ -76,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
     return (
       <div className={classes.root}>
         <Typography variant="h5" className={classes.title}>Settings</Typography>
-        <Typography variant="subtitle1">Hello, John Doe</Typography>
+        <Typography variant="subtitle1">Hello, {info?.username}</Typography>
         <Divider className={classes.divider} />
         <Grid container spacing={3}>
           {listLifecycle === Lifecycle.Success &&

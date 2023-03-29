@@ -74,7 +74,7 @@ function Home( {} ){
                     <div className="row100">
                     <div className="col">
                         <div className="inputBox">
-                            <input type="text" name="password" required="required" />
+                            <input type="password" name="password" required="required" />
                             <span className="text">Password</span>
                             <span className="line"></span>
                         </div>
