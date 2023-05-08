@@ -12,6 +12,7 @@ import {
   Button,
 } from '@material-ui/core';
 import axios from "axios"
+import { redirect } from 'react-router';
 
 function Send() {
   const [accountType, setAccountType] = useState('checking');

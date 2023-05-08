@@ -6,7 +6,10 @@ import { faCreditCard, faPiggyBank } from '@fortawesome/fontawesome-free-solid'
 import { Container, Typography, Box, Grid, TextField, Button, Link, Paper } from '@mui/material'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+// import app from '../api/api-users';
 
+const { PROJECT_ID, BRANCH_ID} = process.env;
+// const url = "https://console.neon.tech/api/v2/projects/"+PROJECT_ID+"/branches/"+ BRANCH_ID;
 
 function Home( {} ){
     const navigate = useNavigate();
@@ -19,7 +22,34 @@ function Home( {} ){
         const username = event.target.username.value;
         const password = event.target.password.value;
 
-        axios.post('http://localhost:3001/api/login', { username, password })
+    //     axios.post('http://localhost:3001/api/login', { username, password })
+    //     .then(response => {
+    //         console.log(response.data);
+    //         localStorage.setItem('userId', response.data.userId);
+    //         navigate(`/overview/${response.data.userId}`);
+    //     })
+    //     .catch(error => {
+    //         console.error(error);
+    //     });
+    //   };
+    require('dotenv').config({path: '../.env'});
+
+    const request = require("request");
+    
+    var headers = {
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${process.env.api}`,
+      'Content-Type': 'application/json'
+    };
+    
+    var options = {
+      url: process.env.endpoint,
+      headers: headers
+    };
+
+    const reqeustcall = request(options, callback);
+
+      axios.post(`/api/login`, { username, password })
         .then(response => {
             console.log(response.data);
             localStorage.setItem('userId', response.data.userId);
@@ -39,7 +69,7 @@ function Home( {} ){
         const username = event.target.username.value;
         const password = event.target.password.value;
         const creditCardNumber = event.target.cardNumber.value;
-        axios.post('http://localhost:3001/api/accounts', { creditCardNumber, username, password })
+        axios.post(`/api/accounts`, { creditCardNumber, username, password })
         .then(response => {
             console.log(response.data);
         })

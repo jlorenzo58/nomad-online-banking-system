@@ -1,22 +1,86 @@
 const express = require('express');
-const { pool } = require('../db');
+// const { pool } = require('../db').default;
+const pool = require('../db').default;
 const app = express();
-const db = require('../db');
+// const db = require('.
 const cors = require('cors');
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
+require('dotenv').config({path: '../.env'});
 
+const request = require("request");
+
+
+var headers = {
+  'Accept': 'application/json',
+  'Authorization': `Bearer ${process.env.api}`,
+  'Content-Type': 'application/json'
+};
+
+var options = {
+  url: `${process.env.endpoint}`,
+  headers: headers
+};
+
+var dataString = {
+  "endpoint": {
+    "branch_id": process.env.BRANCH_ID,
+    "type": "read_write"
+  }
+};
+
+var options_post = {
+    url: process.env.endpoint,
+    method: 'POST',
+    headers: headers,
+    body: dataString
+};
+
+function callback(error, response, body) {
+  if (!error && response.statusCode == 200) {
+      console.log("body ", body);
+  }
+}
+request(options_post, callback);
+const port = 3001
+// const { PROJECT_ID, BRANCH_ID} = process.env;
+// const pool = "https://console.neon.tech/api/v2/projects/"+PROJECT_ID+"/branches/"+ BRANCH_ID;
+
+
+
+function login(error, response, body){
+  const { username, password } = req.body;
+  if (!error && response.statusCode == 200) {
+      try {
+        const query = 'SELECT id FROM users WHERE username = $1 AND password = $2';
+        const values = [username, password];
+        const result = pool.query(query, values);
+        
+        console.log("query ", req.body)
+        if (result.rows.length > 0) {
+          
+          res.status(200).json({ message: 'Login successful', userId: result.rows[0].id });
+        } else {
+          res.status(401).json({ message: 'Invalid username or password' });
+        }
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+      }
+    };
+}
 
 app.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
-  
+    
     try {
       const query = 'SELECT id FROM users WHERE username = $1 AND password = $2';
       const values = [username, password];
-      const result = await pool.query(query, values);
-      
+      // const result = await pool.query(query, values);
+      const result = request(options2,(query, values));
+      console.log("query ", req.body)
       if (result.rows.length > 0) {
         
         res.status(200).json({ message: 'Login successful', userId: result.rows[0].id });
@@ -46,7 +110,7 @@ app.post('/api/accounts', async (req, res) => {
       }
 });
 
-app.get('/api/overview/:id', async (req, res) => {
+app.get('api/overview/:id', async (req, res) => {
   const { id } = req.params;
   
   try {
@@ -193,7 +257,16 @@ app.post('/api/transfer/:id', async (req, res) => {
 });
 
 
-
-app.listen(3001, () => {
-  console.log('Server listening on port 3001');
+app.listen(port, () => {
+  
+  console.log(`Server listening on port ${port}`);
 });
+
+
+  
+
+
+// app.listen(3001, 'localhost'); // or server.listen(3001, '0.0.0.0'); for all interfaces
+// app.on('listening', function() {
+//     console.log('Express server started on port %s at %s', server.address().port, server.address().address);
+// });
