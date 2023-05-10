@@ -1,25 +1,42 @@
 const express = require('express');
 const { pool } = require('../db');
 const app = express();
-const db = require('../db');
+// const db = require('../db');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 
+const postgres = require('postgres');
+require('dotenv').config();
+
+const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
+const URL = `postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}/${PGDATABASE}?options=project%3D${ENDPOINT_ID}`;
+
+const sql = postgres(URL, { ssl: 'require' });
+
+async function getPostgresVersion() {
+  const result = await sql`select version()`;
+  console.log(result);
+}
+
+getPostgresVersion();
 
 app.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
   
     try {
-      const query = 'SELECT id FROM users WHERE username = $1 AND password = $2';
+      // const query = 'SELECT id FROM users WHERE username = $1 AND password = $2';
       const values = [username, password];
-      const result = await pool.query(query, values);
+      // const result = await pool.query(query, values);
+      const query = sql`SELECT id FROM users WHERE username = ${username} AND password = ${password}`;
+      const result = await query;
       
-      if (result.rows.length > 0) {
-        
-        res.status(200).json({ message: 'Login successful', userId: result.rows[0].id });
+      // const result = await sql(query, values);
+      console.dir(result[0].id);
+      if (result[0].id >= 0) {
+        res.status(200).json({ message: 'Login successful', userId: result[0].id });
       } else {
         res.status(401).json({ message: 'Invalid username or password' });
       }
@@ -32,14 +49,15 @@ app.post('/api/login', async (req, res) => {
 app.post('/api/accounts', async (req, res) => {
     try {
         const { username, password, creditCardNumber } = req.body;
-        const id = await pool.query('SELECT id FROM users WHERE credit_card_num=$1', [creditCardNumber]);
+        const query = 'SELECT id FROM users WHERE credit_card_num=$1';
+        const id = await pool.query(query, [creditCardNumber]);
         if (id.rows.length === 0) {
           return res.status(400).send('Invalid credit card number');
         }
         else{
-          const result = await pool.query('UPDATE users SET username = $1, password = $2 WHERE id = $3', [username, password, id.rows[0].id]);
+          const updateQuery= 'UPDATE users SET username = $1, password = $2 WHERE id = $3';
+          const result = await pool.query(updateQuery, [username, password, id.rows[0].id]);
           console.log(result);
-      
           res.status(200).json({ message: 'Account created successfully', userId: id.rows[0].id });
         }
       } catch (err) {
