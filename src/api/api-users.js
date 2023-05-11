@@ -8,6 +8,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 
+const serverless = require("serverless-http");
+// Create a router to handle routes
+const router = express.Router();
+
 const postgres = require('postgres');
 require('dotenv').config();
 
@@ -23,7 +27,7 @@ async function getPostgresVersion() {
 
 getPostgresVersion();
 
-app.post('/api/login', async (req, res) => {
+router.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
   
     try {
@@ -46,7 +50,7 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
-app.post('/api/accounts', async (req, res) => {
+router.post('/api/accounts', async (req, res) => {
     try {
         const { username, password, creditCardNumber } = req.body;
         // const query = 'SELECT id FROM users WHERE credit_card_num=$1';
@@ -70,7 +74,7 @@ app.post('/api/accounts', async (req, res) => {
       }
 });
 
-app.get('/api/overview/:id', async (req, res) => {
+router.get('/api/overview/:id', async (req, res) => {
   const { id } = req.params;
   
   try {
@@ -87,7 +91,7 @@ app.get('/api/overview/:id', async (req, res) => {
   }
 });
 
-app.get('/api/settings/:id', async (req, res) => {
+router.get('/api/settings/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -105,7 +109,7 @@ app.get('/api/settings/:id', async (req, res) => {
   }
 });
 
-app.put('/api/settings/:id', async (req, res) => {
+router.put('/api/settings/:id', async (req, res) => {
   const { id } = req.params;
   const { username, email, phone, address } = req.body;
 
@@ -125,7 +129,7 @@ app.put('/api/settings/:id', async (req, res) => {
   }
 });
 
-app.post('/api/send-money/:id', async (req, res) => {
+router.post('/api/send-money/:id', async (req, res) => {
   const { accountType, amount, account } = req.body;
 
   const { id } = req.params; 
@@ -182,7 +186,7 @@ app.post('/api/send-money/:id', async (req, res) => {
   }
 });
 
-app.post('/api/deposit-check/:id', async (req, res) => {
+router.post('/api/deposit-check/:id', async (req, res) => {
   try {
     const { accountType, amount } = req.body;
     const { id } = req.params; 
@@ -221,7 +225,7 @@ app.post('/api/deposit-check/:id', async (req, res) => {
 
 // POST /api/transfer
 // Transfer money between two accounts
-app.post('/api/transfer/:id', async (req, res) => {
+router.post('/api/transfer/:id', async (req, res) => {
   const { fromAccount, toAccount, amount } = req.body;
   const { id } = req.params; 
   try {
@@ -283,6 +287,23 @@ app.post('/api/transfer/:id', async (req, res) => {
 
 
 
-app.listen(3001, () => {
-  console.log('Server listening on port 3001');
-});
+// app.listen(3001, () => {
+//   console.log('Server listening on port 3001');
+// });
+
+// Use the router to handle requests to the `/.netlify/functions/api` path
+// app.use(`/.netlify/functions/`, router);
+
+app.use('/.netlify/functions/api/login', router);
+app.use('/.netlify/functions/api/accounts',router);
+app.use('/.netlify/functions/api/overview/:id',router);
+app.use('/.netlify/functions/api/settings/:id',router);
+app.use(`/.netlify/functions/api/send-money/:id`,router);
+app.use('/.netlify/functions/api/deposit-check/:id',router);
+app.use('/.netlify/functions/api/transfer/:id', router);
+
+
+
+// Export the app and the serverless function
+module.exports = app;
+module.exports.handler = serverless(app);

@@ -7,7 +7,6 @@ import { Container, Typography, Box, Grid, TextField, Button, Link, Paper } from
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-
 function Home( {} ){
     const navigate = useNavigate();
     const [account, setAccount] = useState(false);
@@ -19,7 +18,7 @@ function Home( {} ){
         const username = event.target.username.value;
         const password = event.target.password.value;
 
-        axios.post('http://localhost:3001/api/login', { username, password })
+        axios.post('/api/login', { username, password })
         .then(response => {
             console.log(response.data);
             localStorage.setItem('userId', response.data.userId);
@@ -36,7 +35,7 @@ function Home( {} ){
         const username = event.target.username.value;
         const password = event.target.password.value;
         const creditCardNumber = event.target.cardNumber.value;
-        axios.post('http://localhost:3001/api/accounts', { creditCardNumber, username, password })
+        axios.post('/api/accounts', { creditCardNumber, username, password })
         .then(response => {
             localStorage.setItem('userId', response.data.userId);
             navigate(`/overview/${response.data.userId}`);
