@@ -3,8 +3,9 @@
   base = "/"
   command = "npm run build"
   functions = "netlify/functions/expressjsFetching"
-  publish = "/dist/"
-
+  publish = "netlify/dist"
+  [build.environment]
+    NODE_VERSION = "18"
 [functions]
   external_node_modules = ["express", "postgres"]
   node_bundler = "esbuild"
@@ -15,6 +16,10 @@
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
+[[redirects]]
+  from = "/*"
+  status = 200
+  to = "/index.html"
 
   ## (optional) Settings for Netlify Dev
   ## https://github.com/netlify/cli/blob/main/docs/netlify-dev.md#project-detection
