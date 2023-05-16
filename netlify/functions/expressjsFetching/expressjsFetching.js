@@ -1,29 +1,34 @@
-const fetch = require('node-fetch')
+const express = require('express');
+const { Router } = require('express');
+const serverless = require('serverless-http');
+const postgres = require('postgres');
 
-const handler = async function () {
+const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
+const URL = `postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}/${PGDATABASE}?options=project%3D${ENDPOINT_ID}`;
+const sql = postgres(URL, { ssl: 'require' });
+
+const api = express();
+const router = Router();
+
+router.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+
   try {
-    const response = await fetch('https://icanhazdadjoke.com', {
-      headers: { Accept: 'application/json' },
-    })
-    if (!response.ok) {
-      // NOT res.status >= 200 && res.status < 300
-      return { statusCode: response.status, body: response.statusText }
-    }
-    const data = await response.json()
+    const query = sql`SELECT id FROM users WHERE username = ${username} AND password = ${password}`;
+    const result = await query;
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ msg: data.joke }),
+    console.dir(result[0].id);
+    if (result[0].id >= 0) {
+      res.status(200).json({ message: 'Login successful', userId: result[0].id });
+    } else {
+      res.status(401).json({ message: 'Invalid username or password' });
     }
   } catch (error) {
-    // output to netlify function log
-    console.log(error)
-    return {
-      statusCode: 500,
-      // Could be a custom message or object i.e. JSON.stringify(err)
-      body: JSON.stringify({ msg: error.message }),
-    }
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
   }
-}
+});
 
-module.exports = { handler }
+api.use('/.netlify/functions/api', router);
+
+module.exports.handler = serverless(api);

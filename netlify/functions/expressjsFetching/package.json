@@ -14,6 +14,9 @@
   "author": "Netlify",
   "license": "MIT",
   "dependencies": {
-    "node-fetch": "^2.6.1"
+    "express": "^4.18.2",
+    "node-fetch": "^2.6.1",
+    "postgres": "^3.3.4",
+    "serverless-http": "^3.2.0"
   }
 }
