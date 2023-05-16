@@ -18,11 +18,11 @@ function Home( {} ){
         const username = event.target.username.value;
         const password = event.target.password.value;
 
-        axios.post('/api/login', { username, password })
+        axios.post('/.netlify/functions/api/login', { username, password })
         .then(response => {
             console.log(response.data);
             localStorage.setItem('userId', response.data.userId);
-            navigate(`/overview/${response.data.userId}`);
+            navigate(`/.netlify/functions/api/overview/${response.data.userId}`);
         })
         .catch(error => {
             console.error(error);
@@ -35,10 +35,10 @@ function Home( {} ){
         const username = event.target.username.value;
         const password = event.target.password.value;
         const creditCardNumber = event.target.cardNumber.value;
-        axios.post('/api/accounts', { creditCardNumber, username, password })
+        axios.post('/.netlify/functions/api/accounts', { creditCardNumber, username, password })
         .then(response => {
             localStorage.setItem('userId', response.data.userId);
-            navigate(`/overview/${response.data.userId}`);
+            navigate(`/.netlify/functions/api/overview/${response.data.userId}`);
         })
         .catch(error => {
             console.error(error);

@@ -15,11 +15,8 @@
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
+  force = false
   status = 200
-[[redirects]]
-  from = "/*"
-  status = 200
-  to = "/index.html"
 
   ## (optional) Settings for Netlify Dev
   ## https://github.com/netlify/cli/blob/main/docs/netlify-dev.md#project-detection
