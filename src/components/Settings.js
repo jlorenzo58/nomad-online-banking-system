@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box,TextField, Button, Grid, Divider, Paper, Typography } from '@material-ui/core';
+import { Box, TextField, Button, Grid, Divider, Paper, Typography } from '@material-ui/core';
 import { Lifecycle } from "./Lifecycle.ts";
 import axios from "axios"
 
@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
     return (
       <div className={classes.root}>
         <Typography variant="h5" className={classes.title}>Settings</Typography>
-        <Typography variant="subtitle1">Hello, {info?.username}</Typography>
+        <Typography variant="subtitle1">Hello {info?.username}</Typography>
         <Divider className={classes.divider} />
         <Grid container spacing={3}>
           {listLifecycle === Lifecycle.Success &&

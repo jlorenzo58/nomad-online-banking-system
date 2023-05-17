@@ -4,51 +4,88 @@ import image from "../images/nomads.png"
 import { ThemeContext } from '../themeContext.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCreditCard, faPiggyBank } from '@fortawesome/fontawesome-free-solid'
-import { Container, Typography, Box, Grid, TextField, Button, Link, Paper } from '@mui/material'
+import { Container, CircularProgress, Typography, Box, Grid, TextField, Button, Link, Paper } from '@mui/material'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function Home( {} ){
     const navigate = useNavigate();
     const [account, setAccount] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    let isMounted
+    let source
+
+    useEffect(() => {
+        isMounted = true;
+        source = axios.CancelToken.source();
+    
+        // Clean up function
+        return () => {
+          isMounted = false;
+          source.cancel('Request canceled');
+        };
+      }, []);
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        setIsLoading(true);
         console.log(event.target.username.value);
         console.log(event.target.password.value);
         const username = event.target.username.value;
         const password = event.target.password.value;
 
-        axios.post('/.netlify/functions/api/login', { username, password })
+        axios.post('/.netlify/functions/api/login', { username, password }, { cancelToken: source.token })
         .then(response => {
-            console.log(response.data);
-            localStorage.setItem('userId', response.data.userId);
-            navigate(`/overview/${response.data.userId}`);
+            if (isMounted) {
+                // Update state and navigate if component is still mounted
+                console.log(response.data);
+                localStorage.setItem('userId', response.data.userId);
+                navigate(`/overview/${response.data.userId}`);
+                setIsLoading(false);
+              }
         })
         .catch(error => {
             console.error(error);
+        if (isMounted) {
+            // Update state if component is still mounted
+            setIsLoading(false);
             alert("Incorrect username or password");
+      }
         });
-      };
+    };
 
-      const handleSignIn = (event) =>{
+    const handleSignIn = (event) =>{
         event.preventDefault();
+        setIsLoading(true);
         const username = event.target.username.value;
         const password = event.target.password.value;
         const creditCardNumber = event.target.cardNumber.value;
-        axios.post('/.netlify/functions/api/accounts', { creditCardNumber, username, password })
+        axios.post('/.netlify/functions/api/accounts', { creditCardNumber, username, password }, { cancelToken: source.token })
         .then(response => {
-            localStorage.setItem('userId', response.data.userId);
-            navigate(`/overview/${response.data.userId}`);
+            if (isMounted) {
+                // Update state and navigate if component is still mounted
+                localStorage.setItem('userId', response.data.userId);
+                navigate(`/overview/${response.data.userId}`);
+                setIsLoading(false);
+            }
         })
         .catch(error => {
-            console.error(error);
-            alert("Credit card not found");
+            if (isMounted) {
+                // Update state if component is still mounted
+                setIsLoading(false);
+                alert("Credit card not found");
+            }
         });
-      }
+    }
    
     return(
         <Fragment>
+        {isLoading && (
+            <div className="loading-overlay">
+              <CircularProgress size={80} thickness={40} />
+            </div>
+          )}
+            <Fragment>
             <div className="home">
                 <img src = {image} width="350" />
             </div>
@@ -240,8 +277,9 @@ function Home( {} ){
           </Link>
         </div>
       </Grid>
-    </Grid>
-            
+            </Grid>
+            </Fragment>
+          
         </Fragment>
     )
 }
