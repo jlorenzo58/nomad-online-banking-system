@@ -58,7 +58,7 @@ const AccountOverview = () => {
     }
     if( lifecycle === Lifecycle.Never ) {
       setListLifecycle(Lifecycle.Loading)
-      axios.get(`/overview/${params.id}`)
+      axios.get(`/.netlify/functions/api/overview/${params.id}`)
       .then(response => {
         // console.log(response.data)
         setInfo(response.data);

@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
       }
       if( lifecycle === Lifecycle.Never ) {
         setListLifecycle(Lifecycle.Loading)
-        axios.get(`/settings/${userId}`)
+        axios.get(`/.netlify/functions/api/settings/${userId}`)
         .then(response => {
           setInfo(response.data);
           setListLifecycle(Lifecycle.Success)
@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
       const phone = event.target.phone.value;
       const address = event.target.address.value;
 
-      axios.put(`/settings/${userId}`, {username, email, phone, address})
+      axios.put(`/.netlify/functions/api/settings/${userId}`, {username, email, phone, address})
       .then(response => {
         console.log(response.data)
         setListLifecycle(Lifecycle.Never)
