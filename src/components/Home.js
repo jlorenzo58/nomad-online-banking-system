@@ -223,7 +223,7 @@ function Home( {} ){
             }
 
             <Grid container spacing={2}>
-      <Grid item xs={3}>
+      <Grid item xs={12} sm={3}>
         <div style={{ padding: '20px' }}>
           <Typography variant="h6" style={{ color: '#614aeb' }}>
             Checking with the right features
@@ -236,7 +236,7 @@ function Home( {} ){
           </Link>
         </div>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={12} sm={3}>
         <div style={{ padding: '20px' }}>
           <Typography variant="h6" style={{ color: '#614aeb' }}>
             Cash Back offers
@@ -249,7 +249,7 @@ function Home( {} ){
           </Link>
         </div>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={12} sm={3}>
         <div style={{ padding: '20px' }}>
           <Typography variant="h6" style={{ color: '#614aeb' }}>
             Invest your way
@@ -262,7 +262,7 @@ function Home( {} ){
           </Link>
         </div>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={12} sm={3}>
         <div style={{padding: '20px' }}>
           <Typography variant="h6" style={{ color: '#614aeb' }}>
             Save on interest
