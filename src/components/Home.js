@@ -58,21 +58,21 @@ function Home( {} ){
         const username = event.target.username.value;
         const password = event.target.password.value;
         const creditCardNumber = event.target.cardNumber.value;
-        axios.post('/.netlify/functions/api/accounts', { creditCardNumber, username, password }, { cancelToken: source.token })
+        axios.post('/.netlify/functions/api/accounts', { creditCardNumber, username, password })
         .then(response => {
-            if (isMounted) {
+           
                 // Update state and navigate if component is still mounted
                 localStorage.setItem('userId', response.data.userId);
                 navigate(`/overview/${response.data.userId}`);
                 setIsLoading(false);
-            }
+            
         })
         .catch(error => {
-            if (isMounted) {
+
                 // Update state if component is still mounted
                 setIsLoading(false);
                 alert("Credit card not found");
-            }
+
         });
     }
    

@@ -25,13 +25,22 @@ router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    const query = sql`SELECT id FROM users WHERE username = ${username} AND password = ${password}`;
-    const result = await query;
-
-    console.dir(result[0].id);
-    if (result[0].id >= 0) {
-      res.status(200).json({ message: 'Login successful', userId: result[0].id });
-    } else {
+    // const query = 'SELECT id FROM users WHERE username = $1 AND password = $2';
+    const queryPassword = sql`SELECT password FROM users WHERE username = ${username}`;
+    const passwordResult = await queryPassword;
+    console.log(passwordResult[0].password);
+    const passwordMatch = await bcrypt.compare(password, passwordResult[0].password);
+    // const result = await pool.query(query, values);
+    if(passwordMatch){
+      const query = sql`SELECT id FROM users WHERE username = ${username}`;
+      const result = await query;
+      console.dir(result[0].id);
+      if (result[0].id >= 0) {
+        res.status(200).json({ message: 'Login successful', userId: result[0].id });
+      } 
+    }
+    // const result = await sql(query, values);
+    else {
       res.status(401).json({ message: 'Invalid username or password' });
     }
   } catch (error) {
@@ -43,19 +52,22 @@ router.post('/login', async (req, res) => {
 router.post('/accounts', async (req, res) => {
   try {
       const { username, password, creditCardNumber } = req.body;
+      const saltRounds = 10;
+      const salt = await bcrypt.genSalt(saltRounds);
+      const hashedPassword = await bcrypt.hash(password, salt);
       // const query = 'SELECT id FROM users WHERE credit_card_num=$1';
       // const id = await pool.query(query, [creditCardNumber]);
       const query = sql`SELECT id FROM users WHERE credit_card_num=${creditCardNumber}`;
       const id = await query;
+      console.log(id[0].id)
       if (id[0].id < 0) {
         return res.status(400).send('Invalid credit card number');
       }
       else{
         // const updateQuery= 'UPDATE users SET username = $1, password = $2 WHERE id = $3';
         // const result = await pool.query(updateQuery, [username, password, id.rows[0].id]);
-        const updateQuery = sql`UPDATE users SET username =${username}, password =${password} WHERE id =${id[0].id}`;
-        const result = await updateQuery;
-        console.log(result);
+        const updateQuery = sql`UPDATE users SET username =${username}, password =${hashedPassword} WHERE id =${id[0].id}`;
+        await updateQuery;
         res.status(200).json({ message: 'Account created successfully', userId: id[0].id });
       }
     } catch (err) {
