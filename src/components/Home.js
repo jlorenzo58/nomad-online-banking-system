@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useContext, Fragment} from "react"
 import "../styles/home.css"
+import image from "../images/nomads.png"
 import { ThemeContext } from '../themeContext.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCreditCard, faPiggyBank } from '@fortawesome/fontawesome-free-solid'
@@ -49,7 +50,7 @@ function Home( {} ){
     return(
         <Fragment>
             <div className="home">
-                <h3 className="float-left"> Nomad Banking Solutions </h3>
+                <img src = {image} width="350" />
             </div>
 
             {!account &&
@@ -185,25 +186,62 @@ function Home( {} ){
                 </div>
             </div>
             }
-            <div>
-                <div style={{ padding: '20px', textAlign: 'justify' }}>
-                <div style={{ marginBottom: '20px' }}>
-                    <Typography variant="h5">FAQs</Typography>
-                <div>
-                <Typography variant="subtitle1"><b>What is online banking and how does it work?</b></Typography>
-                <Typography variant="body1">Online banking allows you to manage your bank account through a website or mobile app, instead of having to visit a physical bank branch. You can check your account balance, view transaction history, transfer money, and pay bills.</Typography>
-                </div>
-                <div>
-                    <Typography variant="subtitle1"><b>Is online banking secure?</b></Typography>
-                    <Typography variant="body1">Yes, online banking is generally considered secure, as long as you take appropriate precautions such as using a strong password, logging out after each session, and avoiding public Wi-Fi when accessing your account.</Typography>
-                </div>
-                <div>
-                    <Typography variant="subtitle1"><b>How do I transfer money between accounts?</b></Typography>
-                    <Typography variant="body1">To transfer money between accounts, log in to your online banking account and navigate to the transfer or payments section. </Typography>
-                </div>
-                </div>
-                </div>
-            </div>
+
+            <Grid container spacing={2}>
+      <Grid item xs={3}>
+        <div style={{ padding: '20px' }}>
+          <Typography variant="h6" style={{ color: '#614aeb' }}>
+            Checking with the right features
+          </Typography>
+          <Typography variant="body2" style={{ color: 'black' }}>
+          Our checking account offers a range of features designed to meet your banking needs. Enjoy seamless online banking, mobile deposit, and easy fund transfers. Stay in control of your finances with real-time balance updates and customizable alerts. Plus, take advantage of our fee-free ATM network and earn rewards on qualifying transactions. Open an account today and experience hassle-free banking with all the right features.
+          </Typography>
+          <Link href="#" style={{ color: 'blue' }}>
+            Get Started
+          </Link>
+        </div>
+      </Grid>
+      <Grid item xs={3}>
+        <div style={{ padding: '20px' }}>
+          <Typography variant="h6" style={{ color: '#614aeb' }}>
+            Cash Back offers
+          </Typography>
+          <Typography variant="body2" style={{ color: 'black' }}>
+          Earn cash back on your everyday purchases with our Cash Back program. Get rewarded for using your debit card at participating merchants, including popular retailers, restaurants, and online stores. Whether you're grabbing your morning coffee, shopping for groceries, or treating yourself to a night out, you can earn a percentage of your purchase back as cash. It's a simple and convenient way to make your money go further. Start enjoying the benefits of our Cash Back offers today!
+          </Typography>
+          <Link href="#" style={{ color: 'blue' }}>
+            Learn More
+          </Link>
+        </div>
+      </Grid>
+      <Grid item xs={3}>
+        <div style={{ padding: '20px' }}>
+          <Typography variant="h6" style={{ color: '#614aeb' }}>
+            Invest your way
+          </Typography>
+          <Typography variant="body2" style={{ color: 'black' }}>
+          Take control of your financial future and invest your way with our flexible investment options. Whether you're a seasoned investor or just starting out, we offer a range of investment products to suit your goals and risk tolerance. Choose from a diverse selection of funds, stocks, and bonds, or explore our managed portfolios for hands-off investing. With our user-friendly online platform, you can track your investments, make adjustments, and stay informed about market trends.
+          </Typography>
+          <Link href="#" style={{ color: 'blue' }}>
+            Learn More
+          </Link>
+        </div>
+      </Grid>
+      <Grid item xs={3}>
+        <div style={{padding: '20px' }}>
+          <Typography variant="h6" style={{ color: '#614aeb' }}>
+            Save on interest
+          </Typography>
+          <Typography variant="body2" style={{ color: 'black' }}>
+          With our savings accounts, you can save on interest and make your money work harder for you. Earn competitive interest rates on your savings balance and watch your funds grow over time. Whether you're saving for a specific goal, building an emergency fund, or planning for the future, our savings accounts offer security and peace of mind. Take advantage of features like automatic transfers, round-up options, and personalized savings goals to stay on track.
+          </Typography>
+          <Link href="#" style={{ color: 'blue' }}>
+            Learn More
+          </Link>
+        </div>
+      </Grid>
+    </Grid>
+            
         </Fragment>
     )
 }

@@ -15,7 +15,7 @@ export default function Footer() {
         }}
       >
        
-      <a href="#"> © 2022 Copyright:&nbsp;Nomads Banking</a>
+      <a href="https://docs.google.com/presentation/d/1I0W4qRzWNWNlGoHVZjTVpFFlAG3P9had7c1bQfrhyEs/edit#slide=id.g22685967e50_0_86" target="_blank"> © 2022 Copyright:&nbsp;Nomads Banking</a>
       </footer>
     </Fragment>
   );
