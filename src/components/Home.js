@@ -29,8 +29,6 @@ function Home( {} ){
     const handleSubmit = (event) => {
         event.preventDefault();
         setIsLoading(true);
-        console.log(event.target.username.value);
-        console.log(event.target.password.value);
         const username = event.target.username.value;
         const password = event.target.password.value;
 
