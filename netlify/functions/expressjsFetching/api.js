@@ -81,7 +81,7 @@ try {
 }
 });
 
-router.get('/api/transactions/:userId', async (req, res) => {
+router.get('/transactions/:userId', async (req, res) => {
   const { userId } = req.params;
 
   try {
@@ -190,7 +190,7 @@ try {
 }
 });
 
-router.post('/api/deposit-check/:id', async (req, res) => {
+router.post('/deposit-check/:id', async (req, res) => {
   try {
     const { accountType, amount } = req.body;
     const { id } = req.params; 
@@ -238,63 +238,73 @@ router.post('/api/deposit-check/:id', async (req, res) => {
 // POST /api/transfer
 // Transfer money between two accounts
 router.post('/transfer/:id', async (req, res) => {
-const { fromAccount, toAccount, amount } = req.body;
-const { id } = req.params; 
-try {
-  // Check if the "from" and "to" accounts are different
-  if (fromAccount === toAccount) {
-    return res.status(400).send({ error: 'Transfer not allowed: accounts must be different' });
+  const { fromAccount, toAccount, amount } = req.body;
+  const { id } = req.params; 
+  try {
+    // Check if the "from" and "to" accounts are different
+    if (fromAccount === toAccount) {
+      return res.status(400).send({ error: 'Transfer not allowed: accounts must be different' });
+    }
+
+    // Get the current balance of the "from" account
+    const fromAccountType = fromAccount.startsWith('c') ? 'checking' : 'savings';
+
+    if(fromAccount.startsWith('c')){
+      const transactionDate = new Date().toISOString();
+      const transactionType = 'Transfer (checking to savings)';
+      const query = sql`SELECT checking_balance FROM users WHERE id = ${id}`;
+      const result = await query;
+      const fromAccountBalance = result[0].checking_balance;
+
+      const temp1 = parseFloat(fromAccountBalance) - parseFloat(amount);
+      const newFromAccountBalance = temp1.toFixed(2);
+      const secondQuery = sql`UPDATE users SET checking_balance = ${newFromAccountBalance} WHERE id = ${id}`;
+      const secondResult = await secondQuery;
+
+      const thirdQuery = sql`SELECT savings_balance FROM users WHERE id = ${id}`;
+      const thirdResult = await thirdQuery;
+      const toAccountBalance = thirdResult[0].savings_balance;
+
+      const temp = parseFloat(toAccountBalance) + parseFloat(amount);
+      const newToAccountBalance= temp.toFixed(2);
+
+      const finalQuery = sql`UPDATE users SET savings_balance = ${newToAccountBalance} WHERE id = ${id}`;
+      const insertQuery = sql`INSERT INTO transactions (transaction_date, transaction_type, amount, user_id) VALUES (${transactionDate}, ${transactionType}, ${amount}, ${id})`;
+    
+      const finalResult = await finalQuery;
+      await insertQuery;
+    }
+    else{
+      const transactionDate = new Date().toISOString();
+      const transactionType = 'Transfer (savings to checking)';
+      const query = sql`SELECT savings_balance FROM users WHERE id = ${id}`;
+      const result = await query;
+      const fromAccountBalance = result[0].savings_balance;
+
+      const temp1 = parseFloat(fromAccountBalance) - parseFloat(amount);
+      const newFromAccountBalance = temp1.toFixed(2);
+      const secondQuery = sql`UPDATE users SET savings_balance = ${newFromAccountBalance} WHERE id = ${id}`;
+      const secondResult = await secondQuery;
+
+      const thirdQuery = sql`SELECT checking_balance FROM users WHERE id = ${id}`;
+      const thirdResult = await thirdQuery;
+      const toAccountBalance = thirdResult[0].checking_balance;
+
+      const temp = parseFloat(toAccountBalance) + parseFloat(amount);
+      const newToAccountBalance= temp.toFixed(2);
+      const finalQuery = sql`UPDATE users SET checking_balance = ${newToAccountBalance} WHERE id = ${id}`;
+      const insertQuery = sql`INSERT INTO transactions (transaction_date, transaction_type, amount, user_id) VALUES (${transactionDate}, ${transactionType}, ${amount}, ${id})`;
+    
+      const finalResult = await finalQuery;
+      await insertQuery;
+    }
+
+    // Return success response
+    return res.send({ success: true });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({ error: 'Internal Server Error' });
   }
-
-  // Get the current balance of the "from" account
-  const fromAccountType = fromAccount.startsWith('c') ? 'checking' : 'savings';
-
-  if(fromAccount.startsWith('c')){
-    const query = sql`SELECT checking_balance FROM users WHERE id = ${id}`;
-    const result = await query;
-    const fromAccountBalance = result[0].checking_balance;
-
-    const temp1 = parseFloat(fromAccountBalance) - parseFloat(amount);
-    const newFromAccountBalance = temp1.toFixed(2);
-    const secondQuery = sql`UPDATE users SET checking_balance = ${newFromAccountBalance} WHERE id = ${id}`;
-    const secondResult = await secondQuery;
-
-    const thirdQuery = sql`SELECT savings_balance FROM users WHERE id = ${id}`;
-    const thirdResult = await thirdQuery;
-    const toAccountBalance = thirdResult[0].savings_balance;
-
-    const temp = parseFloat(toAccountBalance) + parseFloat(amount);
-    const newToAccountBalance= temp.toFixed(2);
-
-    const finalQuery = sql`UPDATE users SET savings_balance = ${newToAccountBalance} WHERE id = ${id}`;
-    const finalResult = await finalQuery;
-  }
-  else{
-    const query = sql`SELECT savings_balance FROM users WHERE id = ${id}`;
-    const result = await query;
-    const fromAccountBalance = result[0].savings_balance;
-
-    const temp1 = parseFloat(fromAccountBalance) - parseFloat(amount);
-    const newFromAccountBalance = temp1.toFixed(2);
-    const secondQuery = sql`UPDATE users SET savings_balance = ${newFromAccountBalance} WHERE id = ${id}`;
-    const secondResult = await secondQuery;
-
-    const thirdQuery = sql`SELECT checking_balance FROM users WHERE id = ${id}`;
-    const thirdResult = await thirdQuery;
-    const toAccountBalance = thirdResult[0].checking_balance;
-
-    const temp = parseFloat(toAccountBalance) + parseFloat(amount);
-    const newToAccountBalance= temp.toFixed(2);
-    const finalQuery = sql`UPDATE users SET checking_balance = ${newToAccountBalance} WHERE id = ${id}`;
-    const finalResult = await finalQuery;
-  }
-
-  // Return success response
-  return res.send({ success: true });
-} catch (err) {
-  console.error(err);
-  return res.status(500).send({ error: 'Internal Server Error' });
-}
 });
 
 
