@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Link, useParams } from "react-router-dom"
 import { Box, Button, Paper, Typography } from '@material-ui/core';
 import { Lifecycle } from "./Lifecycle.ts"
+import { useNavigate } from 'react-router-dom';
 import axios from "axios"
 
 const useStyles = makeStyles((theme) => ({
@@ -31,6 +32,11 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '10px',
     padding: theme.spacing(2),
     marginTop: theme.spacing(2),
+    transition: 'background-color 0.3s ease',
+    cursor: 'pointer',
+    '&:hover': {
+      backgroundColor: '#dcdcdc',
+    },
   },
   accountType: {
     fontWeight: 'bold',
@@ -41,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
 const AccountOverview = () => {
   let params=useParams();
   const classes = useStyles();
+  const navigate = useNavigate();
   const now = new Date();
   const [listLifecycle, setListLifecycle] = useState(Lifecycle.Never)
   const hour = now.getHours();
@@ -71,6 +78,9 @@ const AccountOverview = () => {
     }
   }, [listLifecycle])
 
+  const handleClick= () =>{
+    navigate(`/transactions/${params.id}`);
+  }
 
   return (
     <Box className={classes.root}>
@@ -85,14 +95,14 @@ const AccountOverview = () => {
       {listLifecycle === Lifecycle.Success &&
       <Box className={classes.section}>
         <Typography className={classes.sectionTitle}>Accounts</Typography>
-        <Box className={classes.accountBox}>
+        <Box className={classes.accountBox} onClick={() => handleClick()}>
           <Typography className={classes.accountType}>Checking</Typography>
           <Typography variant="h6">${info.checking_balance}</Typography>
           <Typography>Account #: {info.checking_account_num}</Typography>
           <Typography>Routing #: {info.checking_routing_num}</Typography>
         </Box>
 
-        <Box className={classes.accountBox}>
+        <Box className={classes.accountBox} onClick={() => handleClick()}>
           <Typography className={classes.accountType}>Savings</Typography>
           <Typography variant="h6">${info.savings_balance}</Typography>
           <Typography>Account #: {info.savings_account_num}</Typography>

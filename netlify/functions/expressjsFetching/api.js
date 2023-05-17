@@ -81,6 +81,20 @@ try {
 }
 });
 
+router.get('/api/transactions/:userId', async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const query = sql`SELECT * FROM transactions WHERE user_id = ${userId}`;
+    const result = await query;
+
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching transactions:', error);
+    res.status(500).json({ error: 'An error occurred while fetching transactions.' });
+  }
+});
+
 router.get('/settings/:id', async (req, res) => {
 const { id } = req.params;
 

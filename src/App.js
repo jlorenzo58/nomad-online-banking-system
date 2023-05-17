@@ -5,6 +5,7 @@ import * as React from 'react'
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer.js";
 import Overview from "./components/Overview.js";
+import Transactions from "./components/Transactions.js";
 import Settings from "./components/Settings.js";
 import Send from "./components/Send.js";
 import DepositCheck from "./components/DepositCheck.js";
@@ -29,6 +30,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/transfer" element={<Transfer />} />
           <Route path="/overview/:id" element={<Overview />} />
+          <Route path="/transactions/:id" element={<Transactions />} />
           <Route path ="/depositcheck" element={<DepositCheck/>} />
           <Route path ="/contact" element={<Contact />} />
           <Route path="/send" element={<Send />} /> 
