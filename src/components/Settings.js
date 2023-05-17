@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, TextField, Button, Grid, Divider, Paper, Typography } from '@material-ui/core';
 import { Lifecycle } from "./Lifecycle.ts";
 import axios from "axios"
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -24,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   }));
-  
+
   export default function Settings() {
     const classes = useStyles();
     const [listLifecycle, setListLifecycle] = useState(Lifecycle.Never)
@@ -32,6 +33,10 @@ const useStyles = makeStyles((theme) => ({
     const [formData, setFormData] = useState({});
     const userId = localStorage.getItem('userId');
     console.log(userId);
+    const navigate = useNavigate();
+    const handleButtonClick = () => {
+      navigate('/contact');
+    };
 
     useEffect(() => {
       let lifecycle = listLifecycle
@@ -92,7 +97,7 @@ const useStyles = makeStyles((theme) => ({
           }   
           <Grid item xs={12} sm={6}>
             <Typography variant="h6">Support</Typography>
-            <Button variant="contained" color="primary" fullWidth>Schedule a Meeting</Button>
+            <Button variant="contained" color="primary" fullWidth onClick={handleButtonClick} >Contact Us</Button>
             <Divider className={classes.divider} />
             <Button variant="contained" color="secondary" fullWidth>Pause Account</Button>
           </Grid>
