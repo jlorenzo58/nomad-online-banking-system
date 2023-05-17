@@ -85,7 +85,7 @@ router.get('/api/transactions/:userId', async (req, res) => {
   const { userId } = req.params;
 
   try {
-    const query = sql`SELECT * FROM transactions WHERE user_id = ${userId}`;
+    const query = sql`SELECT * FROM transactions WHERE user_id = ${userId} ORDER BY transaction_id DESC`;
     const result = await query;
 
     res.json(result);
@@ -190,41 +190,49 @@ try {
 }
 });
 
-router.post('/deposit-check/:id', async (req, res) => {
-try {
-  const { accountType, amount } = req.body;
-  const { id } = req.params; 
-  
-  if (!id || !accountType || !amount) {
-    return res.status(400).send({ error: 'Missing required parameters' });
-  }
+router.post('/api/deposit-check/:id', async (req, res) => {
+  try {
+    const { accountType, amount } = req.body;
+    const { id } = req.params; 
+    
+    if (!id || !accountType || !amount) {
+      return res.status(400).send({ error: 'Missing required parameters' });
+    }
 
-  if(accountType.startsWith('c')){
-    const query = sql`SELECT checking_balance FROM users WHERE id = ${id}`
-    const result = await query; 
-    console.dir(result[0]);
-    const currentBalance = result[0].checking_balance;
-    const temp = parseFloat(currentBalance) + parseFloat(amount);
-    const newBalance = temp.toFixed(2);
-    const updateQuery = sql`UPDATE users SET checking_balance = ${temp} WHERE id = ${id}`;
-    const finalResult = await updateQuery;
-  }else{
-    // const account = await pool.query(`SELECT "${balanceColumnName}" FROM users WHERE id = $1`, [id]);
-    const query = sql`SELECT savings_balance FROM users WHERE id = ${id}`
-    const result = await query; 
-    console.dir(result[0]);
-    const currentBalance = result[0].savings_balance;
-    const temp = parseFloat(currentBalance) + parseFloat(amount);
-    const newBalance = temp.toFixed(2);
-    const updateQuery = sql`UPDATE users SET savings_balance = ${temp} WHERE id = ${id}`;
-    const finalResult = await updateQuery;
-  }
+    if(accountType.startsWith('c')){
+      const transactionDate = new Date().toISOString();
+      const transactionType = 'Deposit (Checking)';
+      const query = sql`SELECT checking_balance FROM users WHERE id = ${id}`
+      const result = await query; 
+      console.dir(result[0]);
+      const currentBalance = result[0].checking_balance;
+      const temp = parseFloat(currentBalance) + parseFloat(amount);
+      const newBalance = temp.toFixed(2);
+      const updateQuery = sql`UPDATE users SET checking_balance = ${temp} WHERE id = ${id}`;
+      const insertQuery = sql`INSERT INTO transactions (transaction_date, transaction_type, amount, user_id) VALUES (${transactionDate}, ${transactionType}, ${amount}, ${id})`;
+      const finalResult = await updateQuery;
+      await insertQuery;
+    }else{
+      // const account = await pool.query(`SELECT "${balanceColumnName}" FROM users WHERE id = $1`, [id]);
+      const transactionDate = new Date().toISOString();
+      const transactionType = 'Deposit (Savings)';
+      const query = sql`SELECT savings_balance FROM users WHERE id = ${id}`
+      const result = await query; 
+      console.dir(result[0]);
+      const currentBalance = result[0].savings_balance;
+      const temp = parseFloat(currentBalance) + parseFloat(amount);
+      const newBalance = temp.toFixed(2);
+      const updateQuery = sql`UPDATE users SET savings_balance = ${temp} WHERE id = ${id}`;
+      const insertQuery = sql`INSERT INTO transactions (transaction_date, transaction_type, amount, user_id) VALUES (${transactionDate}, ${transactionType}, ${amount}, ${id})`;
+      const finalResult = await updateQuery;
+      await insertQuery;
+    }
 
-  return res.send({ success: true });
-} catch (err) {
-  console.error(err);
-  return res.status(500).send({ error: 'Server error' });
-}
+    return res.send({ success: true });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({ error: 'Server error' });
+  }
 });
 
 // POST /api/transfer
