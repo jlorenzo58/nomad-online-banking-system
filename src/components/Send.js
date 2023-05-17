@@ -36,7 +36,7 @@ function Send() {
   const handleSubmit = (event) => {
     event.preventDefault();
     try {
-      axios.post(`http://localhost:3001/api/send-money/${userId}`, {accountType, amount, account}).then(response => {
+      axios.post(`/send-money/${userId}`, {accountType, amount, account}).then(response => {
         console.log(response.data)
         alert("Sent");
         setAccountType('checking');

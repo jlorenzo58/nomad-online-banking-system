@@ -53,7 +53,7 @@ const DepositBillPage = () => {
     event.preventDefault();
     // alert(`Account Type: ${accountType}, Amount: ${amount}, Account: ${account}`);
     try {
-      axios.post(`http://localhost:3001/api/deposit-check/${userId}`, {accountType, amount}).then(response => {
+      axios.post(`/deposit-check/${userId}`, {accountType, amount}).then(response => {
          alert("Deposits may take a few days to show in your account.");
          setAmount('');
          setAccountType('checking');

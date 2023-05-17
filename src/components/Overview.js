@@ -58,7 +58,7 @@ const AccountOverview = () => {
     }
     if( lifecycle === Lifecycle.Never ) {
       setListLifecycle(Lifecycle.Loading)
-      axios.get(`http://localhost:3001/api/overview/${params.id}`)
+      axios.get(`/overview/${params.id}`)
       .then(response => {
         // console.log(response.data)
         setInfo(response.data);

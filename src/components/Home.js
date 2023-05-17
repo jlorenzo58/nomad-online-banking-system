@@ -22,7 +22,7 @@ function Home( {} ){
         .then(response => {
             console.log(response.data);
             localStorage.setItem('userId', response.data.userId);
-            navigate(`/.netlify/functions/api/overview/${response.data.userId}`);
+            navigate(`/overview/${response.data.userId}`);
         })
         .catch(error => {
             console.error(error);
@@ -38,7 +38,7 @@ function Home( {} ){
         axios.post('/.netlify/functions/api/accounts', { creditCardNumber, username, password })
         .then(response => {
             localStorage.setItem('userId', response.data.userId);
-            navigate(`/.netlify/functions/api/overview/${response.data.userId}`);
+            navigate(`/overview/${response.data.userId}`);
         })
         .catch(error => {
             console.error(error);

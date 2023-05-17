@@ -56,7 +56,7 @@ const DepositBillPage = () => {
       event.preventDefault();
     // alert(`Account Type: ${accountType}, Amount: ${amount}, Account: ${account}`);
     try {
-      axios.post(`http://localhost:3001/api/transfer/${userId}`, {fromAccount, toAccount, amount}).then(response => {
+      axios.post(`/transfer/${userId}`, {fromAccount, toAccount, amount}).then(response => {
         alert(`You transferred $${amount} from ${fromAccount}`);
         setToAccount('');
         setFromAccount('');

@@ -3,7 +3,7 @@
   base = "/"
   command = "npm run build"
   functions = "netlify/functions/expressjsFetching"
-  publish = "netlify/dist"
+  publish = "build"
   [build.environment]
     NODE_VERSION = "18"
 [functions]
